@@ -433,7 +433,7 @@ export const createSelectLayoutsOptions = data => {
 
 }
 
-export const selecteStartingOption = () => {
+export const selectStartingLayout = () => {
 	// TODO: better way of selecting initial default option
 
 	select.value = `${1}`; // 2 drones

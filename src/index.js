@@ -1,5 +1,5 @@
 import { logDeliveryList } from "./lib/debug.js";
-import { createSelectLayoutsOptions, OktoberfestLayoutData, addOnSelectedLayout as setOnSelectedLabel, selecteStartingOption } from "./lib/layouts.js";
+import { createSelectLayoutsOptions, OktoberfestLayoutData, addOnSelectedLayout as setOnSelectedLabel, selectStartingLayout } from "./lib/layouts.js";
 import { solveOktober } from "./lib/oktoberfestSolver.js";
 import { setDeliveriesToRender, setupCanvas, startRendering } from "./lib/rendering.js";
 
@@ -23,7 +23,7 @@ setupCanvas();
 
 createSelectLayoutsOptions(data);
 setOnSelectedLabel(runAlgorithm);
-selecteStartingOption();
+selectStartingLayout();
 
 startRendering();
 

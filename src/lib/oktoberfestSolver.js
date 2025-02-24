@@ -29,10 +29,8 @@ export const solveOktober = (drones, chopps) => {
 		deliveryListByDrone.set(drone, []);
 	}
 
-
 	const lutTakenChopps = [];
 	for (let i = 0; i < chopps.length; ++i) lutTakenChopps[i] = false;
-
 
 	let assignedChopps = 0;
 	while (assignedChopps < chopps.length) {
@@ -45,7 +43,6 @@ export const solveOktober = (drones, chopps) => {
 			const droneState = dronesStates[iDroneState];
 			const closestUntakenChoppIndex = findClosestUntakenChoppIndexOrMinus1(droneState, chopps, lutTakenChopps);
 
-			// if more drones than chopps, stops at the last chopp
 			if (closestUntakenChoppIndex === -1) break;
 
 			const closestUntakenChopp = chopps[closestUntakenChoppIndex];
@@ -53,14 +50,10 @@ export const solveOktober = (drones, chopps) => {
 		}
 
 		const distanceTable = createDistanceTable(closestChopps, dronesStates);
-		// TODO: if debug mode, print logs
-		// logDistanceTableObj(distanceTable, dronesStates);
-		// logDroneStates(dronesStates);
 
 		const deliveries = assignNextDeliveriesByDistanceTable(distanceTable, dronesStates, closestChopps, deliveryListByDrone, drones, chopps);
 		assignedChopps += deliveries;
 
-		// logDroneStates(dronesStates);
 	}
 
 	console.assert(assignedChopps === chopps.length, "assigned chopps must be === chopps.length")
