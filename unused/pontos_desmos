@@ -1,0 +1,88 @@
+
+
+https://www.desmos.com/calculator/kvwvcdcqvt
+
+
+state = Calc.getState()
+
+for (let i = 0; i < state.expressions.list.length; i++) {
+  if (state.expressions.list[i].type == "table") {
+    for (let j = 0; j < state.expressions.list[i].columns.length; j++) {
+      console.log(state.expressions.list[i].columns[j].latex + " = " + state.expressions.list[i].columns[j].values.toString())
+    }
+  }
+}
+
+
+
+state = Calc.getState()
+str = ``;
+for (let i = 0; i < state.expressions.list.length; i++) {
+	str += state.expressions.list[i].latex
+	str += "\n"
+}
+console.log(str);
+
+
+
+
+{ x: 7.6, y: 0.6 },
+{ x: 8, y: 0.6 },
+{ x: 8.2, y: 0.8 },
+{ x: 8.2, y: 1 },
+{ x: 8, y: 1.2 },
+{ x: 7.4, y: 1.4 },
+{ x: 7.4, y: 1.8 },
+{ x: 7.6, y: 2 },
+{ x: 7.6, y: 1.2 },
+{ x: 8, y: 2 },
+{ x: 8.2, y: 1.8 },
+{ x: 6.8, y: 3 },
+{ x: 6.4, y: 3 },
+{ x: 6, y: 3 },
+{ x: 6.4, y: 0.8 },
+{ x: 6.4, y: 1.2 },
+{ x: 6.4, y: 1.6 },
+{ x: 6.4, y: 2 },
+{ x: 6.4, y: 2.6 },
+{ x: 6.4, y: 3.4 },
+{ x: 5.3, y: 1 },
+{ x: 5.8, y: 1.2 },
+{ x: 5.6, y: 1 },
+{ x: 5.8, y: 1.6 },
+{ x: 5.6, y: 1.8 },
+{ x: 5.3, y: 1.8 },
+{ x: 4.8, y: 1.6 },
+{ x: 5, y: 1.8 },
+{ x: 4.8, y: 1.2 },
+{ x: 5, y: 1 },
+{ x: 3.2, y: 1.8 },
+{ x: 3.8, y: 1.8 },
+{ x: 4, y: 1.6 },
+{ x: 4.2, y: 1.4 },
+{ x: 3.6, y: 1.8 },
+{ x: 4.2, y: 1 },
+{ x: 3.4, y: 0.8 },
+{ x: 3.8, y: 0.8 },
+{ x: 3.2, y: 0.8 },
+{ x: 3, y: 0.5 },
+{ x: 3, y: 1 },
+{ x: 3, y: 1.5 },
+{ x: 3, y: 2 },
+{ x: 3, y: 2.5 },
+{ x: 3, y: 3 },
+{ x: 3, y: 3.5 },
+{ x: 2, y: 3.5 },
+{ x: 2, y: 3 },
+{ x: 2, y: 2.5 },
+{ x: 2, y: 2 },
+{ x: 2, y: 1.5 },
+{ x: 2, y: 1 },
+{ x: 1.5, y: 0.5 },
+{ x: 0.95, y: 0.58 },
+{ x: 0.53, y: 1.1 },
+{ x: 0.5, y: 1.5 },
+{ x: 0.5, y: 2 },
+{ x: 0.5, y: 2.5 },
+{ x: 0.5, y: 3 },
+{ x: 0.5, y: 3.5 },
