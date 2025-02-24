@@ -88,20 +88,6 @@ export class Drone {
 }
 
 
-class ClosestChopp {
-	/**
-	 * @param {Point2D} pos
-	 * @param {Number} choppIndex
-	 */
-	constructor(pos, choppIndex) {
-		this.pos = pos;
-		this.choppIndex = choppIndex;
-		// this.dist = dist;
-	}
-}
-
-
-// TODO: maybe can store table width and height
 export class DistanceTable {
 	/**
 	 * @param {Array.<Number>} table
@@ -164,7 +150,6 @@ const assignNextDeliveriesByDistanceTable = (distanceTable, dronesStates, closes
 	let assignedChopps = 0;
 
 	// length min(K, available)
-	// TODO: make a copy of the drones states and reduce it instead of using through a lut
 	const lutDroneTable = new Map();
 	for (let iDrone = 0; iDrone < dronesStates.length; ++iDrone) lutDroneTable.set(iDrone, false);
 
@@ -254,6 +239,16 @@ const findMaximaOfLocalMinima = (localMinimaByChoppIndex) => {
 }
 
 
+class ClosestChopp {
+	/**
+	 * @param {Point2D} pos
+	 * @param {Number} choppIndex
+	 */
+	constructor(pos, choppIndex) {
+		this.pos = pos;
+		this.choppIndex = choppIndex;
+	}
+}
 
 /**
  * @param {Number} iClosestChopp
@@ -270,7 +265,6 @@ const sortClosestDroneOfChopp = (iClosestChopp, dronesStates, closestChopp, dist
 	let localMinimaX = -1;
 	for (let x = 0; x < dronesStates.length; ++x) {
 		if (lutDroneTable.get(x) === true) {
-			// TODO: make a copy of the drones states and reduce it instead of using through luts
 			// console.log(`    drone ${x} true, skipping`);
 			continue;
 		}
@@ -282,7 +276,7 @@ const sortClosestDroneOfChopp = (iClosestChopp, dronesStates, closestChopp, dist
 		}
 	}
 
-	console.assert(localMinimaX !== -1, "wtf");
+	console.assert(localMinimaX !== -1, "wtf localMinimaX === -1");
 	// console.log(`local minima of chopp ${closestChopp.choppIndex} is ${localMinimaX}: ${localMinima.toFixed(2)}`);
 	localMinimaByChoppIndex.set(closestChopp.choppIndex, { dist: localMinima, droneI: localMinimaX });
 }

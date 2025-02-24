@@ -1,0 +1,30 @@
+
+
+  no escopo:
+drones saem de um ponto específico (origem) e fazem entregas
+cada drone sai com todos os pedidos atribuídos a ele e somente os entrega
+para entregá-lo, ele passa por cima de um local (coordenada) de entrega
+após uma entrega, o drone imediatamente sai para a próxima entrega
+drones entregam pedidos em paralelo
+
+
+  fora do escopo:
+altura dos drones (terceira coordenada)
+colisões entre drones
+reabastecimento dos drones / coleta dos pedidos
+tempo que o drone fica ocioso fazendo uma entrega
+
+
+  algoritmo:
+com N pedidos (chopps) para K drones:
+
+o programa supõe que os primeiros K pedidos mais próximos dos drones são os pedidos ótimos para os drones fazerem as primeiras entregas
+
+acha-se a permutação ideal de drones e pedidos para maximizar o paralelismo entre os drones, minimizando a "distância máxima" dessas entregas, para isso, se utiliza o "melhor pior caso" das distâncias entre as permutações entre os K drones e K entregas mais próximas desses drones
+
+(se usássemos força bruta nesse algoritmo para varrer todas as permutações de cada conjunto de K entregas, o custo seria K! (fatorial de K drones), pra cada iteração de pedidos, cada conjunto de K pedidos)
+
+após a primeira iteração de entregas, os K drones assumem a posição das K entregas realizadas
+
+repete-se o processo com as próximas K entregas mais próximas das novas posições dos K drones (dronesStates)
+

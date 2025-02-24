@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="/static/index.css">
 	<link rel="icon" href="/static/favicon.png">
-	<title>Oktoberfest</title>
+	<title>Oktoberfest Solver</title>
 </head>
 <body>
 
@@ -25,10 +25,19 @@
 			<br>
 
 			<!-- <input type="button" id="play" value="Play" /> -->
+			<div style="transform: scale(1.5); transform-origin: top left;">
+				<input id="toggleDbg" type="checkbox">
+				<label for="toggleDbg" style="user-select: none;">Labels</label>
+			</div>
 
 		</div>
 		
 	</div>
+
+	<img id="drone" src="static/camera-drone.png" style="display: none" />
+	<img id="beer" src="static/beer-mug.png" style="display: none" />
+	<img id="beer-full" src="static/beer-mug-full.png" style="display: none" />
+	
 
 	<script src="src/index.js" type="module"></script>
 </body>

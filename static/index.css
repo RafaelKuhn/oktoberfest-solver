@@ -47,3 +47,6 @@ input, select {
 }
 
 
+.hidden {
+	display: none;
+}

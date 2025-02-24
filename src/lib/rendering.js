@@ -2,16 +2,25 @@ import { labels } from "./debug.js";
 import { TAU } from "./math.js";
 import { Drone, Point2D } from "./oktoberfestSolver.js";
 
+/**
+ * @typedef {import('./oktoberfestSolver.js').DeliveriesByDrone} DeliveriesByDrone
+ */
 
 const coordinateSystemMax = 10;
+const widToHeightRatio = 1.2;
+
+const referenceHeight = 911;
+const referenceWidth  = referenceHeight * widToHeightRatio;
+
+const circleRad = 7;
 
 const droneColor = "blue";
 const choppColor = "black";
 
-const lineColor  = "rgba(0, 0, 0, 0.5)"
-const lineColor2 = "rgba(255, 0, 0, 0.5)"
+const lineColor    = "rgba(0, 0, 0, 0.8)";
+const lineColorAlt = lineColor;
+// const lineColorAlt = "rgba(255, 0, 0, 0.5)"
 
-const circleRad = 7;
 
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById("canvao");
@@ -20,17 +29,30 @@ const canvas = document.getElementById("canvao");
 const ctx = canvas.getContext("2d");
 
 
+/** @type {HTMLImageElement} */
+const droneImg = document.getElementById("drone");
+/** @type {HTMLImageElement} */
+const beerImg = document.getElementById("beer");
+/** @type {HTMLImageElement} */
+const beerFullImg = document.getElementById("beer-full");
+
+/** @type {HTMLInputElement} */
+const toggleDrawDebug = document.getElementById("toggleDbg");
+toggleDrawDebug.addEventListener("change", () => renderData.isLabels = toggleDrawDebug.checked);
+
 /**
  * @type {{
  * deliveryList: DeliveriesByDrone,
  * chopps: Array.<Point2D>  
  * drones: Array.<Drone>
+ * isLabels: Boolean
  * }}
  * */
 const renderData = {
 	deliveryList: null,
 	chopps: null,
 	drones: null,
+	isLabels: toggleDrawDebug.checked,
 }
 
 
@@ -47,19 +69,24 @@ export const startRendering = () => {
 	window.requestAnimationFrame(render);
 }
 
-
 const render = () => {
 
 	renderClear();
-
-	renderDescription();
 	renderConnections();
-	renderChoppsAndDrones();
+
+	if (renderData.isLabels) {
+		renderDescription();
+		renderDots();
+	} else {
+		renderSprites();
+	}
+
+	// test type
+	// /** @type {[Drone, Array.<Point2D>]} */
+	// const [k, v] = renderData.deliveryList.entries().next().value;
 
 	window.requestAnimationFrame(render);
 }
-
-const widToHeightRatio = 1.2;
 
 window.addEventListener("resize", () => {
 	setupCanvas();
@@ -72,9 +99,68 @@ export const setupCanvas = () => {
 }
 
 
+const xRemapToCanvas = (x, coordinateSystemMax) => x / coordinateSystemMax * canvas.width;
+const yRemapToCanvas = (y, coordinateSystemMax) => (y / coordinateSystemMax * canvas.height);
+
+const xCenterInCanvas = x => x + canvas.width  * 0.5;
+const yCenterInCanvas = y => canvas.height - (y + canvas.height * 0.5);
+
+const remapX = x => 100 + xRemapToCanvas(x, coordinateSystemMax * widToHeightRatio);
+const remapY = y => yCenterInCanvas(yRemapToCanvas(y, coordinateSystemMax));
+
+
 const renderClear = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.setLineDash([]);
+}
+
+const renderConnections = () => {
+	ctx.lineWidth = 3;
+	ctx.strokeStyle = lineColor;
+	let conInd = 0;
+	for (const [droneSt, deliveryList] of renderData.deliveryList) {
+		if (deliveryList.length === 0) continue;
+
+		if (conInd % 2 == 0) 
+			ctx.strokeStyle = lineColor;
+		else
+			ctx.strokeStyle = lineColorAlt;
+
+		const xDrone = remapX(droneSt.xStart);
+		const yDrone = remapY(droneSt.yStart);
+
+		const first = deliveryList[0];
+		const xFirst = remapX(first.x);
+		const yFirst = remapY(first.y);
+		strokeLineBetween(xDrone, yDrone, xFirst, yFirst );
+
+		let xLast = xFirst;
+		let yLast = yFirst;
+		for (let i = 1; i < deliveryList.length; ++i) {
+			const delivery = deliveryList[i];
+			const xDelivery = remapX(delivery.x);
+			const yDelivery = remapY(delivery.y);
+			strokeLineBetween(xLast, yLast, xDelivery, yDelivery);
+			xLast = xDelivery;
+			yLast = yDelivery;
+		}
+
+		conInd += 1;
+	}
+}
+
+const renderSprites = () => {
+	for (const [droneSt, deliveryList] of renderData.deliveryList) {
+		const xf = remapX(droneSt.xStart);
+		const yf = remapY(droneSt.yStart);
+		drawImageCentered(droneImg, xf, yf, 48);
+
+		for (const delivery of deliveryList) {
+			const xff = remapX(delivery.x);
+			const yff = remapY(delivery.y);
+			drawImageCenteredOffset(beerFullImg, xff, yff, 32, 2, -3);
+		}
+	}
 }
 
 const renderDescription = () => {
@@ -97,53 +183,7 @@ const renderDescription = () => {
 	fillText(txt2, 15 + circleRad, 45 + textH2/2);
 }
 
-
-const xRemapToCanvas = (x, coordinateSystemMax) => x / coordinateSystemMax * canvas.width;
-const yRemapToCanvas = (y, coordinateSystemMax) => (y / coordinateSystemMax * canvas.height);
-
-const xCenterInCanvas = x => x + canvas.width  * 0.5;
-const yCenterInCanvas = y => canvas.height - (y + canvas.height * 0.5);
-
-const remapX = x => 100 + xRemapToCanvas(x, coordinateSystemMax * widToHeightRatio);
-const remapY = y => yCenterInCanvas(yRemapToCanvas(y, coordinateSystemMax));
-
-
-const renderConnections = () => {
-	ctx.lineWidth = 3;
-	ctx.strokeStyle = lineColor;
-	let i = 0;
-	for (const [droneSt, deliveryList] of renderData.deliveryList) {
-		if (deliveryList.length === 0) continue;
-
-		if (i % 2 == 0) 
-			ctx.strokeStyle = lineColor;
-		else
-			ctx.strokeStyle = lineColor2;
-
-		const xDrone = remapX(droneSt.xStart);
-		const yDrone = remapY(droneSt.yStart);
-
-		const first = deliveryList[0];
-		const xFirst = remapX(first.x);
-		const yFirst = remapY(first.y);
-		strokeLineBetween(xDrone, yDrone, xFirst, yFirst );
-
-		let xLast = xFirst;
-		let yLast = yFirst;
-		for (let i = 1; i < deliveryList.length; ++i) {
-			const delivery = deliveryList[i];
-			const xDelivery = remapX(delivery.x);
-			const yDelivery = remapY(delivery.y);
-			strokeLineBetween(xLast, yLast, xDelivery, yDelivery);
-			xLast = xDelivery;
-			yLast = yDelivery;
-		}
-		i += 1;
-	}
-}
-
-
-const renderChoppsAndDrones = () => {
+const renderDots = () => {
 	ctx.fillStyle = choppColor;
 	for (const chopp of renderData.chopps) {
 		const x = remapX(chopp.x);
@@ -152,8 +192,8 @@ const renderChoppsAndDrones = () => {
 
 		const label = labels.get(chopp);
 		const measure = ctx.measureText(label);
-		const letterW = measure.width
-		const letterH = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent
+		const letterW = measure.width;
+		const letterH = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
 		fillText(label, x - letterW * 0.5, y - letterH);
 	}
 
@@ -165,8 +205,8 @@ const renderChoppsAndDrones = () => {
 
 		const label = labels.get(drone);
 		const measure = ctx.measureText(label);
-		const letterW = measure.width
-		const letterH = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent
+		const letterW = measure.width;
+		const letterH = measure.actualBoundingBoxAscent + measure.actualBoundingBoxDescent;
 		fillText(label, x - letterW * 0.5, y - letterH);
 	}
 }
@@ -192,6 +232,39 @@ const strokeCircleIn = (x, y, size) => {
 	ctx.beginPath();
 	ctx.arc(x, y, size, 0, TAU);
 	ctx.stroke();
+}
+
+/**
+ * @param {HTMLImageElement} img
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} baseHeight
+ */
+const drawImageCentered = (img, x, y, baseHeight) => {
+	const newHei = baseHeight * canvas.height / referenceHeight;
+	const newWid = (img.width / img.height) * newHei;
+	
+	const xCentered = x - newWid  * 0.5;
+	const yCentered = y - newHei * 0.5;
+	ctx.drawImage(img, xCentered, yCentered, newWid, newHei);
+}
+
+
+/**
+ * @param {HTMLImageElement} img
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} baseHeight
+ */
+const drawImageCenteredOffset = (img, x, y, baseHeight, xOff, yOff) => {
+	const canvasMultiplier = canvas.height / referenceHeight;
+
+	const newHei = baseHeight * canvasMultiplier;
+	const newWid = (img.width / img.height) * newHei;
+
+	const xCentered = x - newWid  * 0.5;
+	const yCentered = y - newHei * 0.5;
+	ctx.drawImage(img, xCentered + xOff * canvasMultiplier, yCentered + yOff * canvasMultiplier, newWid, newHei);
 }
 
 const fillCircleIn = (x, y, size) => {

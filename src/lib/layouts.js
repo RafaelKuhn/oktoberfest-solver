@@ -26,7 +26,7 @@ const stargazerMode = data => {
 
 	const droneMinY = -4;
 	const droneMaxY = 4;
-	const droneAmount = 10;
+	const droneAmount = 8;
 	data.drones = [];
 	pushDronesInParallel(droneAmount, droneMinY, droneMaxY, data);
 }
@@ -93,51 +93,51 @@ const simple = data => {
 /** @param {OktoberfestLayoutData} data */
 const obviousPath1 = data => {
 	data.chopps = [
-		{ x: 3, y: 0 },
-		{ x: 4, y: 1 },
 		{ x: 5, y: 0 },
-		{ x: 4, y: -1 },
-		{ x: 3, y: -2 },
-		{ x: 4, y: -3 },
+		{ x: 6, y: 1 },
+		{ x: 7, y: 0 },
+		{ x: 6, y: -1 },
 		{ x: 5, y: -2 },
+		{ x: 6, y: -3 },
+		{ x: 7, y: -2 },
 	]
 	data.drones = [
-		{ xStart: 0, yStart: 0 },
+		{ xStart: 2, yStart: 0 },
 	]
 }
 
 /** @param {OktoberfestLayoutData} data */
 const obviousPath2 = data => {
 	data.chopps = [
-		{ x: 3, y: 0 },
-		{ x: 4, y: 1 },
 		{ x: 5, y: 0 },
-		{ x: 4, y: -1 },
-		{ x: 3, y: -2 },
-		{ x: 4, y: -3 },
+		{ x: 6, y: 1 },
+		{ x: 7, y: 0 },
+		{ x: 6, y: -1 },
 		{ x: 5, y: -2 },
+		{ x: 6, y: -3 },
+		{ x: 7, y: -2 },
 	]
 	data.drones = [
-		{ xStart: 0, yStart: 0 },
-		{ xStart: 0, yStart: 1 },
+		{ xStart: 2, yStart: 0 },
+		{ xStart: 2, yStart: 1 },
 	]
 }
 
 /** @param {OktoberfestLayoutData} data */
 const obviousPath3 = data => {
 	data.chopps = [
-		{ x: 3, y: 0 },
-		{ x: 4, y: 1 },
 		{ x: 5, y: 0 },
-		{ x: 4, y: -1 },
-		{ x: 3, y: -2 },
-		{ x: 4, y: -3 },
+		{ x: 6, y: 1 },
+		{ x: 7, y: 0 },
+		{ x: 6, y: -1 },
 		{ x: 5, y: -2 },
+		{ x: 6, y: -3 },
+		{ x: 7, y: -2 },
 	]
 	data.drones = [
-		{ xStart: 0, yStart: 0 },
-		{ xStart: 0, yStart: 1 },
-		{ xStart: 0, yStart: -1 },
+		{ xStart: 2, yStart: 0 },
+		{ xStart: 2, yStart: 1 },
+		{ xStart: 2, yStart: -1 },
 	]
 }
 
@@ -295,11 +295,7 @@ const parallel2 = data => {
 /** @param {OktoberfestLayoutData} data */
 const modeUbots = data => {
 	data.drones = [
-		{ xStart: 0.5, yStart: 4 },
-		// { xStart: 3.0, yStart: 4 },
-		// { xStart: 5.0, yStart: 2 },
-		// { xStart: 7.0, yStart: 4 },
-		// { xStart: 8.0, yStart: 3 },
+		{ xStart: 0.5, yStart: 5 },
 	]
 	data.chopps = [
 		/* 0 */ { x: 7.6, y: 0.6 },
@@ -366,15 +362,23 @@ const modeUbots = data => {
 		/* 61 */ { x: 0.5, y: 3 },
 		/* 62 */ { x: 0.5, y: 3.5 },
 	]
+
+	for (const chopp of data.chopps) {
+		chopp.y -= 2.0;
+	}
+
+	for (const drone of data.drones) {
+		drone.yStart -= 2.0;
+	}
 }
 
 
 
 /** @type {Map.<String, Function>} */
-const internalCallbacksByMode = new Map();
+const internalCallbacksByLayout = new Map();
 
 /** @type {Array.<Function>} */
-const onChangeModeCallbacks = [];
+const onChangeLayoutCallbacks = [];
 
 /** @param {OktoberfestLayoutData} data */
 export const createSelectLayoutsOptions = data => {
@@ -390,6 +394,12 @@ export const createSelectLayoutsOptions = data => {
 
 	makeSelectOption("3 Drones", () =>
 		obviousPath3(data));
+
+	makeSelectOption("Simple", () =>
+		simple(data));
+
+	makeSelectOption("Unoptimized", () =>
+		unoptimized(data));
 		
 	makeSelectOption("Many to few 1", () =>
 		manyFew(data));
@@ -397,34 +407,26 @@ export const createSelectLayoutsOptions = data => {
 	makeSelectOption("Many to few 2", () =>
 		manyFewCluster(data));
 
-	makeSelectOption("Permutations 1", () =>
+	makeSelectOption("Parallel", () =>
+		parallel(data));
+
+	makeSelectOption("Parallel 2", () =>
 		permutations1(data));
 	
-	makeSelectOption("Permutations 2", () =>
+	makeSelectOption("Parallel 3", () =>
 		permutations2(data));
 
-	makeSelectOption("Permutations 3", () =>
-		permutations3(data));
-
-	makeSelectOption("Stress test", () =>
-		stress(data));
+	// makeSelectOption("Permutations 3", () =>
+	// 	permutations3(data));
 
 	makeSelectOption("Clusters", () =>
 		clusters(data));
 
-	makeSelectOption("Parallel", () =>
-		parallel(data));
-
-
-	makeSelectOption("Simple", () =>
-		simple(data));
-
-	makeSelectOption("Unoptimized", () =>
-		unoptimized(data));
-
-
-	makeSelectOption("⭐ Stargazer", () =>
+	makeSelectOption("Big cluster", () =>
 		stargazerMode(data));
+
+	makeSelectOption("Stress test", () =>
+		stress(data));
 	
 	makeSelectOption("🤖 Ubots", () =>
 		modeUbots(data));
@@ -434,7 +436,8 @@ export const createSelectLayoutsOptions = data => {
 export const selecteStartingOption = () => {
 	// TODO: better way of selecting initial default option
 
-	select.value = `${2}`; // 3 drones
+	select.value = `${1}`; // 2 drones
+	// select.value = `${2}`; // 3 drones
 
 	// select.value = `${8}`; // stress test
 	// select.value = `${9}`; // clusters
@@ -444,20 +447,18 @@ export const selecteStartingOption = () => {
 }
 
 /** @param {Function} callback */
-export const addOnSelectedLabelChanged = callback => {
-	onChangeModeCallbacks.push(callback);
+export const addOnSelectedLayout = callback => {
+	onChangeLayoutCallbacks.push(callback);
 }
 
 
 const onChangeMode = mode => {
-	const switchMode = internalCallbacksByMode.get(mode);
+	const switchMode = internalCallbacksByLayout.get(mode);
 	if (!switchMode) throw new Error(`Invalid mode: ${mode}`);
 
-	// stopPlaying();
-	// TODO: refresh graph
 	switchMode();
 
-	for (const callback of onChangeModeCallbacks) {
+	for (const callback of onChangeLayoutCallbacks) {
 		callback();
 	}
 }
@@ -465,9 +466,9 @@ const onChangeMode = mode => {
 let optionsCount = 0;
 const makeSelectOption = (label, callback) => {
 	const value = `${optionsCount}`;
-	if (internalCallbacksByMode.has(value)) throw new Error(`option of value '${value}' already there!`);
+	if (internalCallbacksByLayout.has(value)) throw new Error(`option of value '${value}' already there!`);
 
-	internalCallbacksByMode.set(value, callback);
+	internalCallbacksByLayout.set(value, callback);
 
 	const option = new Option(label, value, false, false);
 	select.add(option);
@@ -512,7 +513,6 @@ const pushRandomDronesInACircle = (circleX, circleY, rad, randomPointsInCircleAm
 }
 
 const pushDronesInParallel = (droneAmount, droneMinY, droneMaxY, data) => {
-	// TODO: use coordinateSystemMax
 
 	for (let i = 0; i < droneAmount; ++i) {
 		const t = i / (droneAmount - 1);
