@@ -93,9 +93,40 @@ window.addEventListener("resize", () => {
 });
 
 export const setupCanvas = () => {
-	canvas.height = document.body.clientHeight - 16;
+	const padding = 8;
+	canvas.height = document.body.clientHeight - padding * 2;
 	canvas.width  = canvas.height;
 	canvas.width *= widToHeightRatio;
+	console.log(`ratio ${canvas.height / canvas.width} 2 ${canvas.width / canvas.height}`);
+	const ratio = canvas.height / canvas.width;
+
+	if ( (canvas.width) >= document.body.clientWidth) {
+		canvas.width = document.body.clientWidth - (padding*2);
+		canvas.height = canvas.width * ratio;
+	}
+
+	const pixelRatio =
+		(window.devicePixelRatio || 1) /
+		(ctx.webkitBackingStorePixelRatio ||
+			ctx.mozBackingStorePixelRatio ||
+			ctx.msBackingStorePixelRatio ||
+			ctx.oBackingStorePixelRatio ||
+			ctx.backingStorePixelRatio || 1);
+
+	const wid = canvas.width;
+	const hei = canvas.height;
+
+	canvas.width  = canvas.width  * pixelRatio;
+	canvas.height = canvas.height * pixelRatio;
+
+	canvas.style.width  = `${wid}px`
+	canvas.style.height = `${hei}px`
+
+
+	// if ( (canvas.width + padding) >= document.body.clientWidth) {
+	// 	canvas.width = document.body.clientWidth - padding;
+	// 	canvas.height = canvas.width * ratio;
+	// }
 }
 
 

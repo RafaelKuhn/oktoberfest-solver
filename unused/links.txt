@@ -1,0 +1,4 @@
+
+
+simulated annealing:
+https://pt.m.wikipedia.org/wiki/Ficheiro:Travelling_salesman_problem_solved_with_simulated_annealing.gif
