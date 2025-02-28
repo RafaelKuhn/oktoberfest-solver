@@ -36,12 +36,12 @@ const stargazerMode = data => {
 const unoptimized = data => {
 	// // simple 1 error
 	data.chopps = [
-		{ x: 0, y: 0 },
-		{ x: 3, y: 0 },
+		{ x: 2, y: 0 },
+		{ x: 5, y: 0 },
 	]
 	data.drones = [
-		{ xStart: 3, yStart: 1 },
-		{ xStart: 8, yStart: 0 },
+		{ xStart: 5, yStart: 1 },
+		{ xStart: 10, yStart: 0 },
 	]
 }
 
@@ -81,12 +81,12 @@ const manyFewCluster = data => {
 const simple = data => {
 	// // simple 1, in order
 	data.chopps = [
-		{ x: 0, y: 0 },
-		{ x: 3, y: 0 },
+		{ x: 2, y: 0 },
+		{ x: 5, y: 0 },
 	]
 	data.drones = [
-		{ xStart: 3, yStart: 1 },
-		{ xStart: 5, yStart: 0 },
+		{ xStart: 5, yStart: 1 },
+		{ xStart: 7, yStart: 0 },
 	]
 }
 
@@ -143,31 +143,31 @@ const obviousPath3 = data => {
 
 
 /** @param {OktoberfestLayoutData} data */
-const permutations2 = data => {
+const parallel3 = data => {
 	// // permutations
 	data.chopps = [
-		{ x: 2, y: -1.0 },
-		{ x: 1, y: -2.0 },
-		{ x: 0, y: -3.0 },
+		{ x: 5, y: -1.0 },
+		{ x: 4, y: -2.0 },
+		{ x: 3, y: -3.0 },
 	]
 	data.drones = [
-		{ xStart: 2, yStart: 1 },
-		{ xStart: 3, yStart: 1 },
-		{ xStart: 4, yStart: 1 },
+		{ xStart: 5, yStart: 1 },
+		{ xStart: 6, yStart: 1 },
+		{ xStart: 7, yStart: 1 },
 	]
 }
 
 /** @param {OktoberfestLayoutData} data */
-const permutations1 = data => {
+const parallel2 = data => {
 	data.chopps = [
-		{ x: 2, y: -1.0 },
-		{ x: 1, y: -2.0 },
-		{ x: 0, y: -3.0 },
+		{ x: 5, y: -1.0 },
+		{ x: 4, y: -2.0 },
+		{ x: 3, y: -3.0 },
 	];
 	data.drones = [
-		{ xStart: 0, yStart: 1 },
-		{ xStart: 2, yStart: 1 },
 		{ xStart: 3, yStart: 1 },
+		{ xStart: 5, yStart: 1 },
+		{ xStart: 6, yStart: 1 },
 	];
 }
 
@@ -230,11 +230,11 @@ const stress = data => {
 	const getRandom = getSeededRandomGenerator("alguma seed 2")
 
 	data.chopps = [];
-	pushRandomChoppsInACircle(6.0,  0.0, 2, 2000, getRandom, data);
-	pushRandomChoppsInACircle(0.5, -2.5, 1, 1000, getRandom, data);
+	pushRandomChoppsInACircle(7.0,  0.0, 2, 2000, getRandom, data);
+	pushRandomChoppsInACircle(1.5, -2.5, 1, 1000, getRandom, data);
 
 	data.drones = [];
-	pushRandomDronesInACircle(1.5, 2.5, 1, 200, getRandom, data);
+	pushRandomDronesInACircle(2.5, 2.5, 1, 200, getRandom, data);
 }
 
 
@@ -257,40 +257,19 @@ const clusters = data => {
 const parallel = data => {
 	// // 4x4 many to many
 	data.chopps = [
-		{ x: 1.0, y: 0 },
-		{ x: 3.2, y: 1 },
-		{ x: 4.4, y: 2 },
-		{ x: 5.6, y: 3 },
+		{ x: 2.0, y: 0 },
+		{ x: 4.2, y: 1 },
+		{ x: 5.4, y: 2 },
+		{ x: 6.6, y: 3 },
 	]
 	data.drones = [
-		{ xStart: 0, yStart: 3 },
-		{ xStart: 0, yStart: 2 },
-		{ xStart: 0, yStart: 1 },
-		{ xStart: 0, yStart: 0 },
+		{ xStart: 1, yStart: 3 },
+		{ xStart: 1, yStart: 2 },
+		{ xStart: 1, yStart: 1 },
+		{ xStart: 1, yStart: 0 },
 	]
 }
 
-/** @param {OktoberfestLayoutData} data */
-const parallel2 = data => {
-	// // 4x4 many to many
-	data.chopps = [
-		{ x: 1.0, y: 0 },
-		{ x: 3.2, y: 1 },
-		{ x: 4.4, y: 2 },
-		{ x: 5.6, y: 3 },
-
-		{ x: 1.5, y: 0 },
-		{ x: 3.7, y: 1 },
-		{ x: 5.1, y: 2 },
-		{ x: 6.1, y: 3 },
-	]
-	data.drones = [
-		{ xStart: 0, yStart: 3 },
-		{ xStart: 0, yStart: 2 },
-		{ xStart: 0, yStart: 1 },
-		{ xStart: 0, yStart: 0 },
-	]
-}
 
 /** @param {OktoberfestLayoutData} data */
 const modeUbots = data => {
@@ -411,10 +390,10 @@ export const createSelectLayoutsOptions = data => {
 		parallel(data));
 
 	makeSelectOption("Parallel 2", () =>
-		permutations1(data));
+		parallel2(data));
 	
 	makeSelectOption("Parallel 3", () =>
-		permutations2(data));
+		parallel3(data));
 
 	// makeSelectOption("Permutations 3", () =>
 	// 	permutations3(data));

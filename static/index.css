@@ -6,6 +6,7 @@ body {
 	height: 100vh;
 	margin: 0;
 	padding: 0;
+	overflow-x: hidden;
 }
 
 canvas {
@@ -35,7 +36,11 @@ input, p {
 }
 
 #right {
-	min-width: 165px;
+	text-align: center;
+}
+
+#wrap {
+	text-align: justify;
 }
 
 
@@ -59,6 +64,34 @@ h1, h2, h3, h4, h5 {
 	margin: 0;
 }
 
+
 .layout {
 	margin-bottom: 15px;
+}
+
+#inputwrap {
+	position: relative;
+	display: flex;
+	/* margin-right: 6vw; */
+	justify-content: center;
+
+	transform: scale(1.5);
+	transform-origin: center center;
+}
+
+#inputwrap label {
+	padding-left: 5px;
+}
+
+
+#bulb-a {
+	margin-top: 25px;
+	display: inline-block;
+	width: fit-content;
+	height: fit-content;
+}
+
+#bulb {
+	width: 40px;
+	height: 40px;
 }

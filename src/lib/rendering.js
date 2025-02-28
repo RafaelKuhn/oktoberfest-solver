@@ -93,15 +93,14 @@ window.addEventListener("resize", () => {
 });
 
 export const setupCanvas = () => {
-	const padding = 8;
-	canvas.height = document.body.clientHeight - padding * 2;
+	const padding = 8 * 2;
+	canvas.height = document.body.clientHeight - padding;
 	canvas.width  = canvas.height;
 	canvas.width *= widToHeightRatio;
-	console.log(`ratio ${canvas.height / canvas.width} 2 ${canvas.width / canvas.height}`);
 	const ratio = canvas.height / canvas.width;
 
-	if ( (canvas.width) >= document.body.clientWidth) {
-		canvas.width = document.body.clientWidth - (padding*2);
+	if ( (canvas.width + padding) >= document.body.clientWidth) {
+		canvas.width = document.body.clientWidth - padding;
 		canvas.height = canvas.width * ratio;
 	}
 
@@ -130,13 +129,13 @@ export const setupCanvas = () => {
 }
 
 
-const xRemapToCanvas = (x, coordinateSystemMax) => x / coordinateSystemMax * canvas.width;
-const yRemapToCanvas = (y, coordinateSystemMax) => (y / coordinateSystemMax * canvas.height);
+const xRemapToCanvas = (x, coordinateSystemRef) => x / coordinateSystemRef * canvas.width;
+const yRemapToCanvas = (y, coordinateSystemRef) => y / coordinateSystemRef * canvas.height;
 
 const xCenterInCanvas = x => x + canvas.width  * 0.5;
 const yCenterInCanvas = y => canvas.height - (y + canvas.height * 0.5);
 
-const remapX = x => 100 + xRemapToCanvas(x, coordinateSystemMax * widToHeightRatio);
+const remapX = x => (canvas.height / referenceHeight) * 100 + xRemapToCanvas(x, coordinateSystemMax * widToHeightRatio);
 const remapY = y => yCenterInCanvas(yRemapToCanvas(y, coordinateSystemMax));
 
 
